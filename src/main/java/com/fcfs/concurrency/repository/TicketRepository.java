@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Ticket save(Ticket ticket);
     Optional<Ticket> findById(Long id);
+    List<Ticket> findByReservationStatus(ReservationStatus status);
 }

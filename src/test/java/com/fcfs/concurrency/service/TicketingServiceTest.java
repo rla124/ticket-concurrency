@@ -31,5 +31,18 @@ public class TicketingServiceTest {
         ExecutorService executorService = Executors.newFixedThreadPool(memberCount);
         CountDownLatch latch = new CountDownLatch(memberCount);
 
+        //when
+        for (int i = 0; i < memberCount; i++) {
+            executorService.submit(() -> {
+                try {
+                    ticketingService.ticketing();
+                } catch (IllegalStateException e) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+
     }
 }

@@ -1,6 +1,7 @@
 package com.fcfs.concurrency.service;
 
 import com.fcfs.concurrency.domain.ReservationOrder;
+import com.fcfs.concurrency.domain.ReservationStatus;
 import com.fcfs.concurrency.repository.ReservationRepository;
 import com.fcfs.concurrency.repository.TicketRepository;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 public class TicketingServiceTest {
@@ -43,6 +46,11 @@ public class TicketingServiceTest {
             });
         }
         latch.await();
+
+        //then
+        assertThat(ticketRepository.findByReservationStatus(ReservationStatus.RESERVED).size()).isEqualTo(ticketAmount);
+        assertThat(ticketRepository.findByReservationStatus(ReservationStatus.FAILED).size()).isEqualTo(memberCount - ticketAmount);
+        assertThat(reservationRepository.findAll().size()).isEqualTo(ticketAmount);
 
     }
 }

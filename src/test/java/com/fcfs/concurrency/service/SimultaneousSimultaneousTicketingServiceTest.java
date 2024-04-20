@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-public class TicketingServiceTest {
+public class SimultaneousSimultaneousTicketingServiceTest {
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -29,7 +29,7 @@ public class TicketingServiceTest {
         int ticketAmount = 10;
 
         ReservationOrder ticketReservationAmount = new ReservationOrder(ticketAmount);
-        TicketingService ticketingService = new TicketingService(ticketReservationAmount, ticketRepository, reservationRepository);
+        SimultaneousTicketingService simultaneousTicketingService = new SimultaneousTicketingService(ticketReservationAmount, ticketRepository, reservationRepository);
 
         ExecutorService executorService = Executors.newFixedThreadPool(memberCount);
         CountDownLatch latch = new CountDownLatch(memberCount);
@@ -38,7 +38,7 @@ public class TicketingServiceTest {
         for (int i = 0; i < memberCount; i++) {
             executorService.submit(() -> {
                 try {
-                    ticketingService.ticketing();
+                    simultaneousTicketingService.ticketing();
                 } catch (IllegalStateException e) {
                 } finally {
                     latch.countDown();

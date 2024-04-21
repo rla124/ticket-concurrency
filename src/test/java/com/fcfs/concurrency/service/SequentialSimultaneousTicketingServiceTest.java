@@ -28,5 +28,19 @@ public class SequentialSimultaneousTicketingServiceTest {
 
         AtomicInteger successCount = new AtomicInteger();
         AtomicInteger failCount = new AtomicInteger();
+
+        //when
+        for (int i = 0; i < memberCount; i++) {
+            try {
+                sequentialTicketingService.ticketing();
+                successCount.incrementAndGet();
+            } catch (Exception e) {
+                System.out.println(e);
+                failCount.incrementAndGet();
+            }
+        }
+
+        System.out.println("successCount = " + successCount);
+        System.out.println("failCount = " + failCount);
     }
 }
